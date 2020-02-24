@@ -1,0 +1,8 @@
+{
+  "name": "olawale",
+  "version": "1.0.0",
+  "description": "everything javascript constructor",
+  "main": "index.js",
+  "author": "Olawale Oyeyipo <olaclassik@gmail.com>",
+  "license": "MIT"
+}

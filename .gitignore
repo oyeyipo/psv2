@@ -2,3 +2,5 @@
 .vscode/
 icons/
 node_modules
+geckodriver.log
+db.sqlite3

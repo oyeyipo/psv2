@@ -1,7 +1,10 @@
 from django.test import TestCase
+from django.urls import resolve
+from mysite.views import landing_page
 
 
-class SmokeTest(TestCase):
-    def test_bad_maths(self):
-        self.assertEqual(1 + 1, 3)
+class LandingPageTest(TestCase):
+    def test_root_url_resolves_to_landing_page_view(self):
+        found = resolve("/")
+        self.assertEqual(found.func, landing_page)
 

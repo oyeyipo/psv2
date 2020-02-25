@@ -9,7 +9,7 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_can_do_something(self):
+    def test_can_get_necessary_info_landing_page(self):
         self.browser.get("http://localhost:8000")
 
         self.assertIn("Oyeyipo Olawale", self.browser.title)

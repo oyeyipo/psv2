@@ -1,5 +1,8 @@
-from selenium import webdriver
+import time
 import unittest
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
 class NewVisitorTest(unittest.TestCase):
@@ -13,6 +16,10 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get("http://localhost:8000")
 
         self.assertIn("Oyeyipo Olawale", self.browser.title)
+
+        header_text = self.browser.find_element_by_tag_name("h1").text
+        self.assertIn("Software Engineer", header_text)
+
         self.fail("Finished the test")
 
     # def test_can_navigate_to_my_work_section(self):
@@ -22,4 +29,3 @@ class NewVisitorTest(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 print("Heello")
-

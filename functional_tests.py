@@ -12,11 +12,11 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_do_something(self):
         self.browser.get("http://localhost:8000")
 
-        self.assertIn("To-Do", self.browser.title)
+        self.assertIn("Oyeyipo Olawale", self.browser.title)
         self.fail("Finished the test")
 
-    def test_can_navigate_to_my_work_section(self):
-        pass
+    # def test_can_navigate_to_my_work_section(self):
+    #     pass
 
 
 if __name__ == "__main__":

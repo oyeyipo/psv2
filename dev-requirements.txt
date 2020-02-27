@@ -1,0 +1,2 @@
+selenium==3.141.0
+black==19.10b0

@@ -1,0 +1,11 @@
+{
+  "name": "personal_site_ola",
+  "version": "2.0.0",
+  "description": "olawale oyeyipo personal portfolio website",
+  "main": "index.js",
+  "author": "Olawale Oyeyipo <olaclassik@gmail.com>",
+  "license": "BSD",
+  "devDependencies": {
+    "jest": "^25.1.0"
+  }
+}

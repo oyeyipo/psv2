@@ -1,4 +1,5 @@
 .venv/
+.pso_env/
 .vscode/
 icons/
 node_modules

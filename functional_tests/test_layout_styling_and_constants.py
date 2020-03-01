@@ -10,7 +10,3 @@ class ConstantsTest(FunctionalTest):
         self.assertIn("Software Engineer", self.browser.title)
         header_text = self.browser.find_element_by_tag_name("h1").text
         self.assertIn("Software Engineer", header_text)
-
-        # [continued]
-        self.fail("Finish the test")
-

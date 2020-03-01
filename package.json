@@ -6,6 +6,7 @@
   "author": "Olawale Oyeyipo <olaclassik@gmail.com>",
   "license": "BSD",
   "devDependencies": {
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "node-sass": "^4.13.1"
   }
 }

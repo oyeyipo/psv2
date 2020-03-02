@@ -4,12 +4,14 @@
   "description": "olawale oyeyipo personal portfolio website",
   "main": "index.js",
   "author": "Olawale Oyeyipo <olaclassik@gmail.com>",
-  "license": "BSD",
+  "license": "MIT",
   "scripts": {
-    "compile:sass": "node-sass static/sass/main.scss static/css/style.css -w"
+    "compile:sass": "node-sass -w static/sass/main.scss static/css/style.css",
+    "sass": "sass --watch static/sass/main.scss static/css/style.css"
   },
   "devDependencies": {
     "jest": "^25.1.0",
-    "node-sass": "^4.13.1"
+    "node-sass": "^4.13.1",
+    "sass": "^1.26.2"
   }
 }

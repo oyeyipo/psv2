@@ -3,6 +3,6 @@
 .vscode/
 icons/
 node_modules
-geckodriver.log
+*.log
 db.sqlite3
 __pycache__

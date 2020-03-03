@@ -1,12 +1,79 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %} {% load static %}
 
-<>
+<div class=""></div>
 {% block title %}Software Engineer | Olawale Oyeyipo{% endblock title %}
-</>
-<>
+<div class=""></div>
 {% block content %}
 <header class="header">
-    <h1>Software Engineer</h1>
+  <nav class="navigation">
+    <a href="/" class="logo__link">
+      <img
+        src="{% static 'images/logo.png' %}"
+        alt="oyeyipo olawale's logo"
+        class="logo"
+      />
+    </a>
+
+    <ul class="navigation__list">
+      <li class="navigation__item">
+        <a href="#" class="navigation__link">Blog</a>
+      </li>
+      <li class="navigation__item">
+        <a href="#" class="navigation__link">Works</a>
+      </li>
+      <li class="navigation__item">
+        <a href="#" class="navigation__link">Contact</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="text-box">
+    <h1 class="heading-primary">
+      <span class="heading-primary--main">build. test. deploy.</span>
+      <span class="heading-primary--sub"
+        >Mobile/Web Application Software Engineer</span
+      >
+    </h1>
+  </div>
+
+  <ul class="social-links-box__list">
+    <li class="social-links-box__item">
+      <a href="#" class="social-links-box__link">
+        <svg class="social-links-box__icon">
+          <use xlink:href="/static/images/sprite.svg#icon-github"></use>
+        </svg>
+      </a>
+    </li>
+    <li class="social-links-box__item">
+      <a href="#" class="social-links-box__link">
+        <svg class="social-links-box__icon">
+          <use xlink:href="/static/images/sprite.svg#icon-linkedin"></use>
+        </svg>
+      </a>
+    </li>
+    <li class="social-links-box__item">
+      <a href="#" class="social-links-box__link">
+        <svg class="social-links-box__icon">
+          <use xlink:href="/static/images/sprite.svg#icon-stackoverflow"></use>
+        </svg>
+      </a>
+    </li>
+  </ul>
 </header>
+
+<!-- <main class="main">
+  main
+</main> -->
+
+<footer class="footer">
+  <div class="footer__madeby">
+    <p>Made by Olawale Oyeyipo 💻</p>
+  </div>
+  <div class="footer__copyright">
+    <p>@copyright, 2020.</p>
+  </div>
+</footer>
 {% endblock content %}
-</>
+
+<!-- /static/images/sprite.svg#icon-github -->
+<!-- {% static 'images/sprite.svg#icon-github' %} -->

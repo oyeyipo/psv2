@@ -1,0 +1,103 @@
+//////////////////////////////////////
+// LOGO
+.logo {
+  height: 3.25rem;
+}
+
+//////////////////////////////////////
+// HEADING
+.heading-primary {
+  color: var(--color-grey-light-1);
+  text-transform: uppercase;
+  &--main {
+    display: block;
+    font-size: 5rem;
+    font-weight: 400;
+  }
+
+  &--sub {
+    display: block;
+    font-size: 2.4rem;
+    text-transform: capitalize;
+  }
+}
+
+.text-box {
+  align-self: center;
+}
+
+//////////////////////////////////////
+// NAVIGATION
+.navigation {
+  display: flex;
+  justify-content: space-between;
+
+  &__list {
+    display: flex;
+    font-size: 2rem;
+    list-style: none;
+  }
+
+  &__item {
+    text-transform: capitalize;
+
+    &:not(:last-child) {
+      margin-right: 2rem;
+    }
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      color: var(--color-grey-light-2);
+      text-decoration: none;
+    }
+  }
+}
+
+//////////////////////////////////////
+// SOCIAL LINKS
+.social-links-box {
+  &__list {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+
+    align-self: center;
+  }
+
+  &__item {
+    list-style: none;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+  }
+
+  &__icon {
+    height: 3rem;
+    width: 3rem;
+  }
+}
+
+//////////////////////////////////////
+// FOOTER
+.footer {
+  background-color: var(--color-grey-dark-1);
+  height: 8.5rem;
+  font-size: 1.5rem;
+  color: var(--color-grey-light-1);
+  padding: 1rem;
+  text-align: center;
+
+  &__madeby {
+  }
+
+  &__copyright {
+  }
+}

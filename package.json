@@ -6,6 +6,10 @@
   "author": "Olawale Oyeyipo <olaclassik@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "compile:sass": "sass static/sass/main.scss static/css/style.comp.css",
+    "compress:css": "sass --style=compressed  static/css/style.prefix.css static/css/style.css",
+    "prefix:css": "postcss --use autoprefixer -b \"last 10 versions\" static/css/style.comp.css -o static/css/style.prefix.css",
+    "build:css": "npm-run-all compile:sass prefix:css compress:css",
     "sass": "sass --watch static/sass/main.scss static/css/style.css"
   },
   "devDependencies": {

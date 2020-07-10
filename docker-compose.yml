@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  web:
+    build:
+      context: .
+      target: pybase
+    image: personal_site_ola_web
+    # container_name: django  ### this creates a conflict with another container on ssytem
+    command: python manage.py runserver 0.0.0.0:8887
+    volumes:
+      - .:/app
+    ports:
+      - "8887:8887"
+    depends_on:
+      - db
+
+  node:
+    build:
+      context: .
+      target: nodebase
+      dockerfile: ./static/Dockerfile
+    image: personal_site_ola_node
+    depends_on:
+      - web
+    volumes:
+      - .:/app
+    command: yarn sass
+    ports:
+      - "3333:3333"

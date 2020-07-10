@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>New Message</title>
+  <style>*,::after,::before{margin:0;padding:0;box-sizing:border-box}:focus{outline:0}body{font-family:-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;font-size:16px;color:rgba(40,33,56);line-height:1.5;padding:2rem}form{max-width:40rem;margin:0 auto;padding:2rem;border-radius:1rem;box-shadow:0 .25rem 1.5rem .75rem rgba(173,174,179,.18)}label{margin:.2rem 1rem 0 0}button,input,textarea{line-height:inherit;font-family:inherit;font-weight:inherit;font-size:inherit;color:inherit;background:inherit;padding:.2rem .4rem;border:0}input[list]::-webkit-calendar-picker-indicator,input[list]::-webkit-list-button{display:none}textarea{width:100%;min-height:8rem;margin:.5rem 0;resize:none}button{cursor:pointer;color:#747480}button:focus{box-shadow:0 0 0 2px highlight}[type=submit]{cursor:pointer;font-weight:500;line-height:2;padding:0 .6rem;border-radius:1rem;background-color:#0f8287;color:#fff}.row{display:flex;border-bottom:1px solid #eaeaea;padding:.5rem}.row input,.row textarea{flex-grow:1}</style><script>addEventListener("click",({target:a})=>{if(a.hasAttribute("data-show-cc-fields")){const b=document.getElementById("cc-fields");b.replaceWith(b.content),document.getElementById("cc").focus(),a.remove()}})</script>
+  
+  <style>
+    input::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+    
+    .autocomplete {
+      display: inline-block;
+      flex-grow: 1;
+      position: relative;
+    }
+    
+    .autocomplete input {
+      min-width: 100%;
+    }
+    
+    .autocomplete ul {
+      background-color: #ffffff;
+      border: 0.05rem solid #eeeeee;
+      border-radius: 0.4rem;
+      font-size: 0.8rem;
+      list-style-type: none;
+      margin-left: 0.2rem;
+      min-width: 100%;
+      position: absolute;
+      overflow: scroll;
+      z-index: 1;
+    }
+    
+    .autocomplete ul:empty {
+      display: none;
+    }
+    
+    .autocomplete li {
+      padding: 0.5rem;
+    }
+    
+    .autocomplete li:hover {
+      background-color: #eeeeee;
+    }
+    
+    .autocomplete li[aria-selected="true"] {
+      background-color: #ecf9fd;
+    }
+    
+    .autocomplete li h1 {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .autocomplete li p {
+      color: #666666;
+    }
+  </style>
+  
+  <script>
+    (function() {
+      "use strict";
+      
+      class OptionsList {
+        constructor(options, matcher) {
+          this.node = document.createElement("ul");
+          this.options = options;
+          this.filteredOptions = options;
+          this.selectedIndex = -1;
+          this.matcher = matcher;
+          
+          this.hide();
+          this.create();
+          this.bindEvents();
+        }
+        
+        bindEvents() {
+          this.node.addEventListener("mousedown", ({ target }) => {
+            const index = getIndexOfChildNode(this.node, target.closest("li"));
+            if (index > -1) {
+              this.selectedIndex = index;
+              this.commit();
+            }
+          });
+        }
+        
+        create(filter) {
+          while (this.node.lastChild) {
+            this.node.removeChild(this.node.lastChild);
+          }
+          
+          for (const option of this.filteredOptions) {
+            this.node.appendChild(this.createListItem(option, filter));
+          }
+        }
+        
+        createListItem(option, filter) {
+          const li = document.createElement("li");
+          li.setAttribute("role", "option");
+          li.setAttribute("aria-selected", "false");
+          
+          const h1 = document.createElement("h1");
+          h1.innerHTML = getHighlightedText(option.value, filter);
+          li.appendChild(h1);
+          
+          if (option.label && option.label !== option.value) {
+            const p = document.createElement("p");
+            p.innerHTML = getHighlightedText(option.label, filter);
+            li.appendChild(p);
+          }
+          return li;
+        }
+        
+        commit() {
+          this.node.dispatchEvent(
+          new CustomEvent("commit", { detail: this.selection })
+          );
+          this.hide();
+        }
+        
+        hide() {
+          this.shown = false;
+          this.deselect();
+          this.node.setAttribute("hidden", true);
+        }
+        
+        show() {
+          this.shown = true;
+          this.node.removeAttribute("hidden");
+        }
+        
+        filter(text) {
+          const matcher = new RegExp(text, "gi"); // case-insensitive
+          this.filteredOptions = this.options.filter(
+          option =>
+          (option.value && option.value.match(matcher)) ||
+          (option.label && option.label.match(matcher))
+          );
+          
+          this.create(text);
+          this.show();
+        }
+        
+        deselect() {
+          this.selectedIndex = -1;
+          for (const item of [...this.childNodes]) {
+            item.removeAttribute("aria-selected");
+          }
+        }
+        
+        select(index) {
+          this.deselect();
+          const item = this.childNodes.item(index);
+          item.setAttribute("aria-selected", true);
+          item.scrollIntoView();
+          this.selectedIndex = index;
+        }
+        
+        previous() {
+          this.select(
+          this.selectedIndex === -1 ? 0 : Math.max(this.selectedIndex - 1, 0)
+          );
+        }
+        
+        next() {
+          this.select(
+          this.selectedIndex === -1 ? 0 : Math.min(this.selectedIndex + 1, this.childNodes.length - 1)
+          );
+        }
+        
+        get childNodes() {
+          return this.node.children;
+        }
+        
+        get selection() {
+          if (this.selectedIndex > -1) {
+            const selectedItem = this.filteredOptions[this.selectedIndex];
+            return { value: selectedItem.value, label: selectedItem.label };
+          }
+          return null;
+        }
+      }
+      
+      class Autocomplete {
+        constructor(input) {
+          this.input = input;
+          this.setup();
+        }
+        
+        bindEvents() {
+          this.input.addEventListener("click", () => {
+            this.optionsList.show();
+          });
+          
+          this.input.addEventListener("blur", () => {
+            this.optionsList.hide();
+          });
+          
+          this.input.addEventListener("keydown", evt => {
+            const key = evt.keyCode;
+            if (this.optionsList.shown) {
+              switch (key) {
+                case keys.TAB:
+                this.optionsList.commit();
+                break;
+                case keys.ENTER:
+                // Prevent form submission
+                evt.preventDefault();
+                this.optionsList.commit();
+                break;
+                case keys.UP:
+                // Prevent text cursor movement
+                evt.preventDefault();
+                this.optionsList.previous();
+                break;
+                case keys.DOWN:
+                // Prevent text cursor movement
+                evt.preventDefault();
+                this.optionsList.next();
+                break;
+                case keys.ESC:
+                this.optionsList.hide();
+                break;
+              }
+            }
+          });
+          
+          this.input.addEventListener("input", ({ target: { value } }) => {
+            const matchText = value.match(this.matcher)[0];
+            this.optionsList.filter(matchText.toLowerCase());
+          });
+          
+          this.optionsList.node.addEventListener("commit", ({ detail }) => {
+            if (detail) {
+              this.setInputValue(detail);
+            }
+            
+            // Commits caused by clicks will steal focus so we delay input focusing to the next tick
+            setTimeout(() => this.input.focus(), 0);
+          });
+        }
+        
+        setup() {
+          this.matcher = this.input.hasAttribute("multiple") ? matchers.MULTIPLE : matchers.SINGLE;
+          
+          // Assume the datalist is static for simplicity
+          this.optionsList = new OptionsList(
+          getOptionsFromDatalist(this.input.getAttribute("list")),
+          this.matcher
+          );
+          
+          // Disable browser's inbuilt support of datalists
+          this.input.removeAttribute("list");
+          this.input.setAttribute("autocomplete", "off");
+          this.input.setAttribute("role", "combobox");
+          
+          // Wrap our input node and list for alignment
+          const wrapper = document.createElement("div");
+          wrapper.className = "autocomplete";
+          this.input.parentNode.replaceChild(wrapper, this.input);
+          wrapper.append(this.input, this.optionsList.node);
+          this.optionsList.node.setAttribute(
+          "style",
+          "max-height: " + getAvailableHeight(this.input)
+          );
+          
+          this.bindEvents();
+          this.input.focus();
+        }
+        
+        setInputValue({ value }) {
+          this.input.value = this.input.value.replace(this.matcher, value);
+        }
+      }
+      
+      // --- Constants ---
+      const keys = {
+        ENTER: 13,
+        TAB: 9,
+        UP: 38,
+        DOWN: 40,
+        ESC: 27
+      };
+      
+      const matchers = {
+        // Matches an entire string
+        SINGLE: new RegExp(/.*/),
+        // Matches last part of comma-separated string
+        MULTIPLE: new RegExp(/[^, ]*$/)
+      };
+      
+      // --- Utility methods ---
+      // Returns string with special characters escaped
+      function getEscapedString(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      }
+      
+      // Wraps highlight text with <mark> elements
+      function getHighlightedText(text, highlight) {
+        return highlight ? text.replace(RegExp(getEscapedString(highlight), "gi"), "<mark>$&</mark>") : text;
+      }
+      
+      // Returns the index of a given node relative to its parent
+      function getIndexOfChildNode(parentNode, node) {
+        const nodes = Array.from(parentNode.children);
+        return nodes.indexOf(node);
+      }
+      
+      // Returns an array of options extracted from a datalist element
+      function getOptionsFromDatalist(datalistId) {
+        const datalist = document.getElementById(datalistId);
+        
+        const options = [];
+        if (datalist) {
+          for (const item of datalist.childNodes) {
+            options.push({ label: item.label, value: item.value });
+          }
+        }
+        
+        return options;
+      }
+        
+      // Returns the height in px from the bottom of a given element to the viewport boundary
+      function getAvailableHeight(targetElement) {
+        const { y, height } = targetElement.getBoundingClientRect();
+        const padding = 10;
+        return Math.floor(window.innerHeight - y - height - padding) + "px";
+      }
+      
+      // --- Setup: global listener ---
+      window.addEventListener("focusin", ({ target }) => {
+        if (target.tagName === "INPUT" && target.hasAttribute("list")) {
+          new Autocomplete(target);
+        }
+      });
+    })();
+  </script>
+    
+  </head>
+  <body>
+    <form>
+      <div class="row">
+        <label for="to">To</label>
+        <input type="email" name="to" id="to" list="contacts" multiple required autofocus>
+        <button type="button" tabindex="-1" data-show-cc-fields>Cc / Bcc</button>
+      </div>
+      
+      <template id="cc-fields">
+        <div class="row">
+          <label for="cc">Cc</label>
+          <input type="email" name="cc" id="cc" list="contacts" multiple>
+        </div>
+        <div class="row">
+          <label for="bcc">Bcc</label>
+          <input type="email" name="bcc" id="bcc" list="contacts" multiple>
+        </div>
+      </template>
+      
+      <div class="row">
+        <label for="subject">Subject</label>
+        <input type="text" name="subject" id="subject" list="recent-subjects">
+      </div>
+      
+      <textarea name="body" placeholder="Type your message here…"></textarea>
+      
+      <button type="submit">Send</button>
+    </form>
+    
+    <datalist id="contacts"><option value="adalberto@example.net">Adalberto Deckow</option><option value="angle@example.com">Angle Skiles</option><option value="anisha@example.net">Anisha D'Amore</option><option value="anja@example.com">Anja Wilderman</option><option value="ariel@example.net">Ariel Ratke</option><option value="armand@example.org">Armand Hoeger</option><option value="arnita@example.com">Arnita Sanford</option><option value="aubrey@example.org">Aubrey Hammes</option><option value="augustus@example.com">Augustus Kirlin</option><option value="ayanna@example.net">Ayanna Gorczany</option><option value="benito@example.net">Benito Yundt</option><option value="brice@example.org">Brice Buckridge</option><option value="brice@example.net">Brice Zemlak</option><option value="bridgette@example.org">Bridgette Zieme</option><option value="brittani@example.org">Brittani Reinger</option><option value="broderick@example.net">Broderick Lubowitz</option><option value="candace@example.com">Candace Langosh</option><option value="candace@example.org">Candace Powlowski</option><option value="carlota@example.net">Carlota Treutel</option><option value="carmelia@example.net">Carmelia Leannon</option><option value="carson@example.org">Carson Beahan</option><option value="casey@example.org">Casey Denesik</option><option value="cassey@example.net">Cassey Altenwerth</option><option value="cedrick@example.com">Cedrick Senger</option><option value="charley@example.org">Charley Bergnaum</option><option value="clark@example.net">Clark Hodkiewicz</option><option value="cleta@example.com">Cleta O'Hara</option><option value="cordelia@example.org">Cordelia Kertzmann</option><option value="dana@example.org">Dana Mueller</option><option value="danny@example.org">Danny Glover</option><option value="darin@example.org">Darin Braun</option><option value="dave@example.org">Dave Ritchie</option><option value="dianne@example.com">Dianne Huel</option><option value="dionna@example.net">Dionna Barton</option><option value="dominic@example.net">Dominic Rodriguez</option><option value="dorsey@example.org">Dorsey Lind</option><option value="dwight@example.net">Dwight Weber</option><option value="earlie@example.org">Earlie Hahn</option><option value="elenor@example.org">Elenor Kreiger</option><option value="ezekiel@example.net">Ezekiel Wuckert</option><option value="felicita@example.com">Felicita Cummings</option><option value="floyd@example.org">Floyd Kunde</option><option value="francoise@example.org">Francoise Rutherford</option><option value="gale@example.com">Gale Quitzon</option><option value="georgia@example.net">Georgia Wisoky</option><option value="gudrun@example.com">Gudrun Swift</option><option value="halley@example.net">Halley Goodwin</option><option value="hallie@example.net">Hallie Kassulke</option><option value="hilario@example.net">Hilario Schneider</option><option value="hubert@example.net">Hubert Barrows</option><option value="jame@example.org">Jame Upton</option><option value="jerold@example.net">Jerold Hermann</option><option value="jeromy@example.org">Jeromy Wilkinson</option><option value="jesse@example.net">Jesse Conroy</option><option value="john@example.com">John Spinka</option><option value="jonathon@example.net">Jonathon Crist</option><option value="kristopher@example.net">Kristopher Hilpert</option><option value="launa@example.com">Launa Stoltenberg</option><option value="leon@example.org">Leon Gislason</option><option value="leonia@example.net">Leonia Langworth</option><option value="lewis@example.org">Lewis Sipes</option><option value="liliana@example.com">Liliana Okuneva</option><option value="magaly@example.org">Magaly Bode</option><option value="maranda@example.org">Maranda Oberbrunner</option><option value="maryln@example.org">Maryln Herzog</option><option value="mckinley@example.org">Mckinley Prosacco</option><option value="mercedes@example.com">Mercedes Ruecker</option><option value="michael@example.net">Michael Waters</option><option value="murray@example.com">Murray Klein</option><option value="napoleon@example.org">Napoleon Murray</option><option value="neil@example.com">Neil Carter</option><option value="nereida@example.org">Nereida Walter</option><option value="oscar@example.com">Oscar Kerluke</option><option value="pasty@example.com">Pasty Padberg</option><option value="pierre@example.net">Pierre Bruen</option><option value="quentin@example.com">Quentin Gulgowski</option><option value="ralph@example.org">Ralph Rice</option><option value="reynaldo@example.com">Reynaldo Wiegand</option><option value="rosamond@example.org">Rosamond Moore</option><option value="roy@example.net">Roy Wolff</option><option value="shawn@example.com">Shawn Hirthe</option><option value="tari@example.org">Tari Becker</option><option value="tawna@example.org">Tawna Shields</option><option value="tiera@example.org">Tiera Sauer</option><option value="toby@example.com">Toby DuBuque</option><option value="tosha@example.org">Tosha Stracke</option><option value="velda@example.com">Velda Jenkins</option><option value="vernon@example.net">Vernon Stiedemann</option><option value="weston@example.net">Weston Von</option><option value="wilfred@example.net">Wilfred Klocko</option><option value="yadira@example.com">Yadira Nicolas</option></datalist>
+    <datalist id="recent-subjects"><option>Phased demand-driven capacity</option><option>Automated grid-enabled capacity</option><option>Sharable neutral collaboration</option><option>Do you want me to come with you</option><option>Down-sized systematic interface</option><option>User-friendly maximized time-frame</option><option>Focused system-worthy ability</option><option>Okay, I won't</option><option>Down-sized stable software</option><option>Team-oriented coherent complexity</option><option>I don't know</option><option>Optimized high-level portal</option><option>Polarised disintermediate benchmark</option><option>I wish I could go with you</option><option>Streamlined motivating strategy</option><option>I don't think they even heard me</option><option>Profit-focused non-volatile application</option><option>Fully-configurable real-time contingency</option><option>Pre-emptive holistic ability</option><option>Up-sized scalable frame</option><option>Visionary background access</option><option>Tape Seinfeld for me</option><option>Integrated intangible matrices</option><option>Universal multi-state collaboration</option><option>Right-sized local frame</option><option>Cross-platform tertiary forecast</option><option>Pre-emptive even-keeled groupware</option><option>Extended systematic collaboration</option><option>One! Two! Three</option><option>De-engineered high-level analyzer</option><option>Well, this is certainly a pleasant surprise</option><option>Vision-oriented regional hierarchy</option><option>Strike the tent</option><option>User-friendly multi-state policy</option><option>Organized composite matrices</option><option>Versatile zero tolerance productivity</option><option>Optional reciprocal model</option><option>Versatile zero administration service-desk</option></datalist>
+  </body>
+</html>

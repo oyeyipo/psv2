@@ -5,48 +5,30 @@
 <div class=""></div>
 {% block content %}
 <header class="header">
-    <nav class="navigation">
-        <a href="/" class="logo__link">
-            <img src="{% static 'images/logo.png' %}" alt="oyeyipo olawale's logo" class="logo" />
-        </a>
-
-        <ul class="navigation__list">
-            <li class="navigation__item">
-                <a href="#" class="navigation__link">Blog</a>
-            </li>
-            <li class="navigation__item">
-                <a href="#" class="navigation__link">Works</a>
-            </li>
-            <li class="navigation__item">
-                <a href="#" class="navigation__link">Contact</a>
-            </li>
-        </ul>
-    </nav>
-
     <div class="text-box">
         <h1 class="heading-primary">
-            <span class="heading-primary--main">build. test. deploy.</span>
+            <span class="heading-primary--main">Oyeyipo Olawale</span>
             <span class="heading-primary--sub">Mobile/Web Application Software Engineer</span>
         </h1>
     </div>
 
     <ul class="social-links">
         <li class="social-links__item">
-            <a href="#" class="social-links__link">
+            <a href="https://www.github.com/oyeyipowale" class="social-links__link" target="_blank">
                 <svg class="social-links__icon">
                     <use xlink:href="{% static 'images/sprite.svg' %}#icon-github"></use>
                 </svg>
             </a>
         </li>
         <li class="social-links__item">
-            <a href="#" class="social-links__link">
+            <a href="https://www.linkedin.com/oyeyipowale-03k7s" class="social-links__link" target="_blank">
                 <svg class="social-links__icon">
                     <use xlink:href="{% static 'images/sprite.svg' %}#icon-linkedin"></use>
                 </svg>
             </a>
         </li>
         <li class="social-links__item">
-            <a href="#" class="social-links__link">
+            <a href="https://www.stackoverflow.com/u/olawale" class="social-links__link" target="_blank">
                 <svg class="social-links__icon">
                     <use xlink:href="{% static 'images/sprite.svg' %}#icon-stackoverflow"></use>
                 </svg>
@@ -55,19 +37,4 @@
     </ul>
 </header>
 
-<!-- <main class="main">
-  main
-</main> -->
-
-<footer class="footer">
-    <div class="footer__madeby">
-        <p>Made by Olawale Oyeyipo 💻</p>
-    </div>
-    <div class="footer__copyright">
-        <p>@copyright, 2020.</p>
-    </div>
-</footer>
 {% endblock content %}
-
-<!-- /static/images/sprite.svg#icon-github -->
-<!-- {% static 'images/sprite.svg#icon-github' %} -->

@@ -47,3 +47,16 @@
     }
   }
 }
+
+//////////////////////////////////////
+// SMOKE TEST
+.st {
+  background-color: white;
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+}

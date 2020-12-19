@@ -37,6 +37,7 @@ body {
   font-weight: 400;
   line-height: 1.6;
   color: var(--color-grey-dark-2);
+  position: relative;
 }
 
 .heading-primary {
@@ -77,6 +78,17 @@ body {
 }
 .social-links__icon:hover {
   fill: var(--color-grey-light-4);
+}
+
+.st {
+  background-color: white;
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
 }
 
 .header {

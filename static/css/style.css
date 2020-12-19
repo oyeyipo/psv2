@@ -43,6 +43,8 @@ body {
 .heading-primary {
   color: var(--color-grey-light-4);
   text-transform: uppercase;
+  margin-top: 50vh;
+  transform: translateY(-50%);
   display: grid;
   gap: 1.5rem;
 }
@@ -99,7 +101,7 @@ body {
   height: 100vh;
   background-color: var(--color-grey-dark-1);
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding: 2rem;
 }
 

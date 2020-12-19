@@ -45,12 +45,12 @@ body {
 }
 .heading-primary--main {
   display: block;
-  font-size: 1.6rem;
+  font-size: 7rem;
   font-weight: 700;
 }
 .heading-primary--sub {
   display: block;
-  font-size: 1.4rem;
+  font-size: 2.4rem;
   text-transform: capitalize;
   font-weight: 400;
   color: var(--color-grey-dark-3);
@@ -84,8 +84,8 @@ body {
   height: 100vh;
   background-color: var(--color-grey-dark-1);
   flex-direction: column;
-  justify-content: space-between;
-  padding: 3rem;
+  justify-content: space-evenly;
+  padding: 2rem;
 }
 
 /*# sourceMappingURL=style.css.map */

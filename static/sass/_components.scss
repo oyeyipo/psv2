@@ -3,15 +3,16 @@
 .heading-primary {
   color: var(--color-grey-light-4);
   text-transform: uppercase;
+
   &--main {
     display: block;
-    font-size: 1.6rem;
+    font-size: 7rem;
     font-weight: 700;
   }
 
   &--sub {
     display: block;
-    font-size: 1.4rem;
+    font-size: 2.4rem;
     text-transform: capitalize;
     font-weight: 400;
     color: var(--color-grey-dark-3);
@@ -26,9 +27,6 @@
 // SOCIAL LINKS
 .social-links {
   list-style: none;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
 
   display: grid;
   grid-auto-flow: column;

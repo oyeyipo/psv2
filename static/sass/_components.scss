@@ -26,23 +26,22 @@
 // SOCIAL LINKS
 .social-links {
   list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
 
-  &__item {
-    &:not(:last-child) {
-      margin-right: 1rem;
-    }
-  }
+  display: grid;
+  grid-auto-flow: column;
+  place-content: center;
+  gap: 3rem;
 
   &__link {
     text-decoration: none;
   }
 
   &__icon {
-    height: 1.4rem;
-    width: 1.4rem;
+    height: 4rem;
+    width: 4rem;
     fill: var(--color-grey-dark-3);
 
     &:hover {

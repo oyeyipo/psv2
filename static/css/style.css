@@ -62,19 +62,17 @@ body {
 
 .social-links {
   list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.social-links__item:not(:last-child) {
-  margin-right: 1rem;
+  display: grid;
+  grid-auto-flow: column;
+  place-content: center;
+  gap: 3rem;
 }
 .social-links__link {
   text-decoration: none;
 }
 .social-links__icon {
-  height: 1.4rem;
-  width: 1.4rem;
+  height: 4rem;
+  width: 4rem;
   fill: var(--color-grey-dark-3);
 }
 .social-links__icon:hover {
